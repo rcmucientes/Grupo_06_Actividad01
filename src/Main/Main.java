@@ -14,7 +14,6 @@ import java.util.Scanner;
 public class Main {
 		
 	public static final String fichero = "articulos.dat";
-	private static final String CSVReaderBuilder = null;
 	private static ArrayList<Articulo> listaArticulos;
 	
 		public static void main(String[] args) {
@@ -23,8 +22,10 @@ public class Main {
 			
 			listaArticulos = new ArrayList<Articulo>();
 			
+			System.out.println("Bienvenido a programa de gestión de stock");
+			System.out.println("");
 			if (file.exists()) {
-					System.out.println("existe");
+					System.out.println("Existe un fichero con información");
 				// leer fichero y llenar arraylist con todos los objetos del fichero
 				
 				try(FileInputStream fis = new FileInputStream("articulos.dat");
@@ -32,7 +33,8 @@ public class Main {
 					
 					listaArticulos = (ArrayList<Articulo>)ois.readObject();
 					
-					System.out.println("Objeto leido");
+					System.out.println(""
+							+ "Fichero cargado");
 					
 				} catch (FileNotFoundException e) {
 					System.out.println("no hay archivo");
@@ -46,11 +48,9 @@ public class Main {
 				} 
 			}	
 			else
-				System.out.println("NO existe");
-			
+				System.out.println("NO existen ficheros");
 			
 			int opcion = 0;
-
 			do {
 				opcion= Menu.pintarMenu();
 				switch (opcion) {
@@ -65,12 +65,12 @@ public class Main {
 					break;
 					case 4:
 						listar();
+					break;	
 					case 5:
 						exportarCsv();	
 					break;
 					case 6:
 						escribirFichero();
-						System.out.println("Archivo grabado");
 					break;
 				}
 			}while (opcion!=6);
@@ -78,120 +78,119 @@ public class Main {
 			System.out.println("Fin del programa");
 		}
 
-	public static void anadirArticulo() {
-		Articulo articulo = new Articulo();
-		Scanner sc = new Scanner(System.in);
-		boolean e = false;
+		public static void anadirArticulo() {
+			Articulo articulo = new Articulo();
+			Scanner sc = new Scanner(System.in);
+			boolean e = false;
 
-			do {
-				System.out.println("Indique el id del nuevo artículo:");
-				int id = sc.nextInt();
-				Articulo art = new Articulo();
-				art.setId(id);
-				int posicion = listaArticulos.indexOf(art);
-				if (posicion == -1) {
-					articulo.setId(id);
-					sc.nextLine();
-					e=true;
-				}
-				else
-					System.out.println("El id ya existe, por favor, asigne uno nuevo");
-					System.out.println("");
-			}while(!e);
-			
-			System.out.println("Indique el nombre del nuevo artículo:");
-			String nombre = sc.nextLine();
-			articulo.setNombre(nombre);
-			System.out.println("Indique la descripción del nuevo artículo:");
-			String descripcion = sc.nextLine();
-			articulo.setDescripcion(descripcion);
-			System.out.println("Indique el stock del nuevo artículo:");
-			int stock = sc.nextInt();
-			articulo.setStock(stock);
-			System.out.println("Indique el precio del nuevo artículo:");
-			float precio = sc.nextFloat();
-			articulo.setPrecio(precio);
-		
-			listaArticulos.add(articulo);
-			System.out.println("El artículo se ha añadido");
-		
-	}	
-	
-	public static void borrarPorId() {
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Indique el id del artículo: ");
-		
-		int id = sc.nextInt();
-	
-		Articulo art = new Articulo();
-		art.setId(id);
-		int posicion = listaArticulos.indexOf(art);
-		
-		if (posicion == -1)
-			System.out.println("No se ha encontrado ningún artículo con ese id");
-		else
-			listaArticulos.remove(posicion);
-			System.out.println("El artículo ha sido eleminado");
-		
-		
-	}
-	
-	public static  void escribirFichero(){
-		
-		try (FileOutputStream fos = new FileOutputStream("articulos.dat");
-			 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-			
-			oos.writeObject(listaArticulos);
-			System.out.println("Objeto introducido");
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
-	}
-	
-	public static void listar(){
-		
-		boolean contenido = listaArticulos.isEmpty();
-		
-		if (contenido == true)
-			System.out.println("El almacén está vacío");
-		else
-			for(Articulo p : listaArticulos){
-				System.out.println(p);
-		}
+				do {
+					System.out.println("Indique el id del nuevo artículo:");
+					int id = sc.nextInt();
+					Articulo art = new Articulo();
+					art.setId(id);
+					int posicion = listaArticulos.indexOf(art);
+					if (posicion == -1) {
+						articulo.setId(id);
+						sc.nextLine();
+						e=true;
+					}
+					else
+						System.out.println("El id ya existe, por favor, asigne uno nuevo");
+						System.out.println("");
+				}while(!e);
 				
-	}
-	
-	public static void consultaPorId(){
+				System.out.println("Indique el nombre del nuevo artículo:");
+				String nombre = sc.nextLine();
+				articulo.setNombre(nombre);
+				System.out.println("Indique la descripción del nuevo artículo:");
+				String descripcion = sc.nextLine();
+				articulo.setDescripcion(descripcion);
+				System.out.println("Indique el stock del nuevo artículo:");
+				int stock = sc.nextInt();
+				articulo.setStock(stock);
+				System.out.println("Indique el precio del nuevo artículo:");
+				float precio = sc.nextFloat();
+				articulo.setPrecio(precio);
+			
+				listaArticulos.add(articulo);
+				System.out.println("El artículo se ha añadido");
+			
+		}	
 		
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Indique el id del artículo: ");
+		public static void borrarPorId() {
+			Scanner sc = new Scanner(System.in);
+			System.out.println("Indique el id del artículo: ");
+			
+			int id = sc.nextInt();
 		
-		int id = sc.nextInt();
-	
-		Articulo art = new Articulo();
-		art.setId(id);
-		int posicion = listaArticulos.indexOf(art);
-		
-		if (posicion == -1)
-			System.out.println("No se ha encontrado ningún artículo con ese id");
-		else
-			System.out.println(listaArticulos.get(posicion));
-	}
-	
-	public static void exportarCsv() {
-		
-		File f = new File("articulos.csv");
-		
-		try (FileWriter fw = new FileWriter(f);){
-			for(Articulo a : listaArticulos) {
-				fw.write(a.toCSV()+"\n");
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
+			Articulo art = new Articulo();
+			art.setId(id);
+			int posicion = listaArticulos.indexOf(art);
+			
+			if (posicion == -1)
+				System.out.println("No se ha encontrado ningún artículo con ese id");
+			else
+				listaArticulos.remove(posicion);
+				System.out.println("El artículo ha sido eleminado");
+			
 		}
 		
-	}
+		public static  void escribirFichero(){
+			
+			try (FileOutputStream fos = new FileOutputStream("articulos.dat");
+				 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+				
+				oos.writeObject(listaArticulos);
+				System.out.println("Archivo grabado");
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			} 
+		}
+		
+		public static void listar(){
+			
+			boolean contenido = listaArticulos.isEmpty();
+			
+			if (contenido == true)
+				System.out.println("El almacén está vacío");
+			else
+				for(Articulo p : listaArticulos){
+					System.out.println(p);
+			}
+					
+		}
+		
+		public static void consultaPorId(){
+			
+			Scanner sc = new Scanner(System.in);
+			System.out.println("Indique el id del artículo: ");
+			
+			int id = sc.nextInt();
+		
+			Articulo art = new Articulo();
+			art.setId(id);
+			int posicion = listaArticulos.indexOf(art);
+			
+			if (posicion == -1)
+				System.out.println("No se ha encontrado ningún artículo con ese id");
+			else
+				System.out.println(listaArticulos.get(posicion));
+		}
+		
+		public static void exportarCsv() {
+			
+			File f = new File("articulos.csv");
+			
+			try (FileWriter fw = new FileWriter(f);){
+				for(Articulo a : listaArticulos) {
+					fw.write(a.toCSV()+"\n");
+					
+				}
+			} catch (Exception e) {
+			}
+			System.out.println("El fichero CSV ha sido creado");
+		}
 	
 
 }
