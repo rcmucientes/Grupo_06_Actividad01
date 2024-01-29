@@ -26,7 +26,6 @@ public class Main {
 			System.out.println("");
 			if (file.exists()) {
 					System.out.println("Existe un fichero con información");
-				// leer fichero y llenar arraylist con todos los objetos del fichero
 				
 				try(FileInputStream fis = new FileInputStream("articulos.dat");
 						ObjectInputStream ois = new ObjectInputStream(fis);) {
@@ -40,10 +39,8 @@ public class Main {
 					System.out.println("no hay archivo");
 					System.out.println("");
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (ClassNotFoundException e) {
-					System.out.println("La clase Contacto no está cargada en memoria");
+				} catch (Exception e) {
 					e.printStackTrace();
 				} 
 			}	
@@ -129,23 +126,10 @@ public class Main {
 			
 			if (posicion == -1)
 				System.out.println("No se ha encontrado ningún artículo con ese id");
-			else
+			else {
 				listaArticulos.remove(posicion);
 				System.out.println("El artículo ha sido eleminado");
-			
-		}
-		
-		public static  void escribirFichero(){
-			
-			try (FileOutputStream fos = new FileOutputStream("articulos.dat");
-				 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-				
-				oos.writeObject(listaArticulos);
-				System.out.println("Archivo grabado");
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			} 
+			}
 		}
 		
 		public static void listar(){
@@ -157,8 +141,7 @@ public class Main {
 			else
 				for(Articulo p : listaArticulos){
 					System.out.println(p);
-			}
-					
+			}		
 		}
 		
 		public static void consultaPorId(){
@@ -181,16 +164,28 @@ public class Main {
 		public static void exportarCsv() {
 			
 			File f = new File("articulos.csv");
-			
+			System.out.println("El fichero CSV ha sido creado");
 			try (FileWriter fw = new FileWriter(f);){
 				for(Articulo a : listaArticulos) {
 					fw.write(a.toCSV()+"\n");
-					
 				}
 			} catch (Exception e) {
 			}
-			System.out.println("El fichero CSV ha sido creado");
+			System.out.println("");
+			System.out.println("Se ha grabado la información en el fichero CSV");
 		}
-	
+		
+		public static  void escribirFichero(){
+			
+			try (FileOutputStream fos = new FileOutputStream("articulos.dat");
+				 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+				
+				oos.writeObject(listaArticulos);
+				System.out.println("Archivo grabado");
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			} 
+		}
 
 }
